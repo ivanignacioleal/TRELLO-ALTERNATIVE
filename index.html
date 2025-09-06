@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Tableros</h1>
+
+    <!-- Formulario para crear un nuevo tablero -->
+    <div>
+        <input type="text" id="nombre-tablero" placeholder="Nuevo tablero">
+        <button onclick="crearTablero()">Crear Tablero</button>
+    </div>
+
+    <!-- Lista de tableros -->
+    <ul id="tableros-lista">
+        {% for tablero in tableros %}
+            <li id="tablero-{{ tablero.id }}">
+                <strong>{{ tablero.nombre }}</strong>
+
+                <!-- Botón para eliminar un tablero -->
+                <button class="eliminar-tablero" data-id="{{ tablero.id }}" onclick="eliminarTablero(this)">Eliminar Tablero</button>
+
+                <!-- Lista de ítems dentro del tablero -->
+                <ul id="items-lista-{{ tablero.id }}">
+                    {% for item in tablero.items %}
+                        <li id="item-{{ item.id }}">
+                            {{ item.nombre }}
+                            <button onclick="eliminarItem({{ tablero.id }}, {{ item.id }})">Eliminar Item</button>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Formulario para agregar un ítem dentro del tablero -->
+                <input type="text" id="input-item-{{ tablero.id }}" placeholder="Nuevo ítem">
+                <button onclick="agregarItem(this)">Agregar Ítem</button>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
